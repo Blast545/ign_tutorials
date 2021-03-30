@@ -1,8 +1,11 @@
 # Tutorial: Using teleop_twist_keyboard ROS node to control a diff drive robot in Ignition
 
-This tutorial intends to give a step-by-step guide into how to use ROS tools in conjunction with an Ignition based simulation. For this tutorial, we will be using Ignition Dome and ROS Melodic, however, please note that this tutorial is valid for Ignition releases compatibles with `ros_ign_bridge` and ROS releases compatibles with `teleop_twist_keyboard` and `ros_ign_bridge`.
+This tutorial intends to give a step-by-step guide into how to use ROS tools in conjunction with an Ignition based simulation. 
+You should be able to achieve a result like the one in this [video](https://youtu.be/O2LIB4F2XVQ) at the end of the tutorial.
 
-First will be presented the steps to complete the tutorial, and later will be explained what's going on behind the scene.
+We will be using Ignition Dome and ROS Melodic; however, please note that this tutorial is valid for Ignition releases that are compatible with `ros_ign_bridge` and ROS releases that are compatible with `teleop_twist_keyboard` and `ros_ign_bridge`.
+
+We'll start with the steps to complete the tutorial, and later will be explained what's going on behind the scenes.
 
 ## Pre-Requisites
 
@@ -52,8 +55,6 @@ After running this, you should have an environment similar to this one:
 
 And in the teleop_twist_keyboard terminal you can send commands to the system to move the vehicle robot:
 ![Selection_091](https://user-images.githubusercontent.com/8069967/113032362-2ea21d00-9166-11eb-85a3-702f41205b64.png)
-
-A video demo with the result from this can be seen [here](https://youtu.be/O2LIB4F2XVQ).
 
 ## Understanding the system architecture
 
