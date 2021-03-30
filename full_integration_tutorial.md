@@ -48,16 +48,18 @@ rosrun teleop_twist_keyboard_cpp teleop_twist_keyboard
 ```
 
 After running this, you should have an environment similar to this one:
+![Selection_090](https://user-images.githubusercontent.com/8069967/113032417-38c41b80-9166-11eb-91f5-50efca32f519.png)
 
 And in the teleop_twist_keyboard terminal you can send commands to the system to move the vehicle robot:
+![Selection_091](https://user-images.githubusercontent.com/8069967/113032362-2ea21d00-9166-11eb-85a3-702f41205b64.png)
 
-A video demo with the result from this can be seen here:
+A video demo with the result from this can be seen [here](https://youtu.be/O2LIB4F2XVQ).
 
 ## Understanding the system architecture
 
 For this tutorial, we've used the example world `tunnel.sdf` that includes a diff drive ground vehicle and shows various features available within the simulator. Including the ignition simulator, the whole system works like this:
 
-<<Inserte diagram>>
+![diagrama_tutorial (1)](https://user-images.githubusercontent.com/8069967/113031878-99068d80-9165-11eb-8fce-2e31c104e5eb.png)
 
 * The `teleop_twist_keyboard` node transforms the user inputs into ROS Twist commands. 
 * The `ros_ign_bridge` subscribes to those ROS Twist commands and converts them to Ignition Transport msgs.
