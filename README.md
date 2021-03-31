@@ -1,42 +1,41 @@
 # Tutorial: Using teleop_twist_keyboard ROS node to control a diff drive robot in Ignition
-This package contains a demo with a step-by-step guide into how to use ROS tools in conjunction with an Ignition based simulation. For this tutorial, we will be using Ignition Dome and ROS Melodic, however, please note that this tutorial is valid for Ignition releases compatibles with `ros_ign_bridge` and ROS releases compatibles with `teleop_twist_keyboard` and `ros_ign_bridge`.
+This tutorial intends to give a step-by-step guide into how to use ROS tools in conjunction with an Ignition based simulation.
+You should be able to achieve a result like the one in this [video](https://youtu.be/2ZiRw2ZkTOY) at the end of the tutorial.
 
-First will be presented the steps to complete the tutorial, and later will be explained what's going on behind the scene.
+We will be using Ignition Dome and ROS Melodic; however, please note that this tutorial is valid for Ignition releases that are compatible with `ros_ign_bridge` and ROS releases that are compatible with `teleop_twist_keyboard` and `ros_ign`.
+
+We'll start with the steps to complete the tutorial, and later will be explained what's going on behind the scenes.
 
 ## Pre-Requisites
 
-+ Install Ignition Dome:
++ Install Ignition Dome
 	+ Instructions can be found here: [Dome Installation](https://ignitionrobotics.org/docs/dome)
 + Install ROS Melodic
 	+ Instructions can be found here: [ROS Melodic Installation](http://wiki.ros.org/melodic/Installation)
-+ Install `ros_ign_bridge`. We'll be using ROS Melodic version.
-	+ Main repository can be found here: [README ros_ign_bridge](https://github.com/ignitionrobotics/ros_ign/blob/melodic/ros_ign_bridge/README.md)
-	+ An overview tutorial for ROS + Ignition integration using `ros_ign_bridge` (with installation instructions can be found here): [Ignition Dome Tutorial: ROS integration](https://ignitionrobotics.org/docs/dome/ros_integration)
-+ Install `teleop_twist_keyboard` or `teleop_twist_keyboard_cpp`. For this tutorial we will use the cpp implementation. 
-	+ Installation instructions + example: [Wiki teleop_twist_keyboard_cpp](http://wiki.ros.org/teleop_twist_keyboard_cpp)
++ Install `ros_ign`. We'll be using ROS Melodic version
+	+ Instructions can be found here: [Ros Ign](https://github.com/ignitionrobotics/ros_ign#binaries)
++ Install `teleop_twist_keyboard`
+	+ Instructions + example: [Wiki teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)
 
 ## Steps to complete this tutorial
 
-We will open four different terminals sharing the same environment. In each, we'll run the following commands:
+### Install this demo package
 
-#### Start `roscore` executable
+``` bash
+mkdir -p ~/catkin_ws/src
+git clone git@github.com:Blast545/ign_tutorials.git ~/catkin_ws/src
+cd catkin_ws
+rosdep install -y --from-paths src --ignore-src --rosdistro melodic
+catkin_make
+```
+
+We will open two different terminals sharing the same environment. In each, we'll run the following commands:
+
+#### Run launchfile with ROS, Ignition and `ros_ign`
 ```bash
 # Shell 1
-source /opt/ros/melodic/setup.bash # Source ROS installation
-roscore
-```
-#### Start `ign gazebo` GUI simulation with an example world model
-```bash
-# Shell 2
-source ign_ws/install/setup.bash # Source ignition if it was installed from source
-ign gazebo -v4 tunnel.sdf
-```
-
-#### Start `ros_ign_bridge`
-```bash
-# Shell 3
-source /opt/ros/melodic/setup.bash # Source ROS installation
-rosrun ros_ign_bridge parameter_bridge /cmd_vel@geometry_msgs/Twist@ignition.msgs.Twist
+source ~/catkin_ws/devel/setup.bash
+roslaunch roslaunch ign_tutorials diff_drive_demo.launch
 ```
 
 #### Start `teleop_twist_keyboard` node
@@ -47,12 +46,10 @@ rosrun teleop_twist_keyboard_cpp teleop_twist_keyboard
 ```
 
 After running this, you should have an environment similar to this one:
-![Selection_090](https://user-images.githubusercontent.com/8069967/113032417-38c41b80-9166-11eb-91f5-50efca32f519.png)
+![Selection_092](https://user-images.githubusercontent.com/8069967/113123464-fe509200-91ea-11eb-89a4-6d4a8406e6ef.png)
 
 And in the teleop_twist_keyboard terminal you can send commands to the system to move the vehicle robot:
-![Selection_091](https://user-images.githubusercontent.com/8069967/113032362-2ea21d00-9166-11eb-85a3-702f41205b64.png)
-
-A video demo with the result from this can be seen [here](https://youtu.be/O2LIB4F2XVQ).
+![Selection_091](https://user-images.githubusercontent.com/8069967/113123514-0ad4ea80-91eb-11eb-989b-46ce8fbaefdc.png)
 
 ## Understanding the system architecture
 
@@ -65,11 +62,17 @@ For this tutorial, we've used the example world `tunnel.sdf` that includes a dif
 *  The Ignition Transport msgs are used by diff drive plugin inside the tunnel.sdf that's running in the simulator.
 * The simulator moves the robot accordingly, based on the diff drive plugin output.
 
-We can see from the command used for the ros_bridge: 
-```bash
-rosrun ros_ign_bridge parameter_bridge /cmd_vel@geometry_msgs/Twist@ignition.msgs.Twist
+We can see from the command used for the ros_bridge within the launchfile: 
+```xml
+  <node
+    pkg="ros_ign_bridge"
+    type="parameter_bridge"
+    name="$(anon ros_ign_bridge)"
+    output="screen"
+    args="/model/vehicle/odometry@nav_msgs/Odometry@ignition.msgs.Odometry /cmd_vel@geometry_msgs/Twist@ignition.msgs.Twist ">
+  </node>
 ```
-The msg input/output goes to the /cmd_vel topic (this topic applies to both the Ignition Transport and ROS), it takes `geometry_msgs/Twist` as input and uses `ignition.msgs.Twist` as output.
+The msg input/output goes to the /cmd_vel topic (this topic applies to both the Ignition Transport and ROS), it takes `geometry_msgs/Twist` as input and uses `ignition.msgs.Twist` as output. Same principle applies for the odometry information displayed in `rviz`.
 
 Also, taking a look to the SDF file from `ign_ws/src/ign-gazebo/examples/worlds/tunnel.sdf` we can see:
 
@@ -94,9 +97,8 @@ This is the diff drive plugin configured to receive commands in the `cmd_vel` to
 As homework, can you tackle some challenges to continue the work provided here?
 
 * Try sending commands to the robot using directly the Ignition Transport layer.
-* Can you run this tutorial using a different physics engine? Like TPE.
+* Can you change the launchile to use a different physics engine? Like TPE.
 * The `diff_drive.sdf` example world (`ign_ws/src/ign-gazebo/examples/worlds/diff_drive.sdf`) does not use the same `cmd_vel` topic to receive velocity commands, can you modify the commands to make it work in this scenario?
-* The Diff::drive plugin also provides odometry information output within the Ignition. Can you run another bridge to get this output into ROS?
 
 Want to dig deeper inside Ignition gazebo? Browse the following links:
 
