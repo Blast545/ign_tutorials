@@ -10,12 +10,24 @@ We'll start with the steps to complete the tutorial, and later will be explained
 
 + Install Ignition Dome
 	+ Instructions can be found here: [Dome Installation](https://ignitionrobotics.org/docs/dome)
+
 + Install ROS Melodic
 	+ Instructions can be found here: [ROS Melodic Installation](http://wiki.ros.org/melodic/Installation)
+
 + Install `ros_ign`. We'll be using ROS Melodic version
-	+ Instructions can be found here: [Ros Ign](https://github.com/ignitionrobotics/ros_ign#binaries)
+	``` bash
+        # Add https://packages.osrfoundation.org
+        sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+        wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+        sudo apt-get update
+        # Install `ros_ign`
+        sudo apt install ros-melodic-ros-ign
+	```
+
 + Install `teleop_twist_keyboard`
-	+ Instructions + example: [Wiki teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)
+	``` bash
+	sudo apt-get install ros-melodic-teleop-twist-keyboard
+	```
 
 ## Steps to complete this tutorial
 
