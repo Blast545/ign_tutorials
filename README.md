@@ -34,9 +34,9 @@ We'll start with the steps to complete the tutorial, and later will be explained
 ### Install this demo package
 
 ``` bash
-mkdir -p ~/catkin_ws/src
-git clone git@github.com:Blast545/ign_tutorials.git ~/catkin_ws/src
-cd catkin_ws
+mkdir -p ~/ign_teleop_tutorial_ws/src
+git clone git@github.com:Blast545/ign_tutorials.git ~/ign_teleop_tutorial_ws/src
+cd ~/ign_teleop_tutorial_ws
 catkin_make
 ```
 
@@ -45,15 +45,14 @@ We will open two different terminals sharing the same environment. In each, we'l
 #### Run launchfile with ROS, Ignition and `ros_ign`
 ```bash
 # Shell 1
-source ~/catkin_ws/devel/setup.bash
+source ~/ign_teleop_tutorial_ws/devel/setup.bash
 roslaunch roslaunch ign_tutorials diff_drive_demo.launch
 ```
 
 #### Start `teleop_twist_keyboard` node
 ```bash
-# Shell 4
-source ros_ws/devel/setup.bash # Source ROS workspace if the node was installed from source
-rosrun teleop_twist_keyboard_cpp teleop_twist_keyboard
+# Shell 2
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
 After running this, you should have an environment similar to this one:
@@ -108,8 +107,12 @@ This is the diff drive plugin configured to receive commands in the `cmd_vel` to
 As homework, can you tackle some challenges to continue the work provided here?
 
 * Try sending commands to the robot using directly the Ignition Transport layer.
+  * Check this ignition tutorial: [Moving the robot](https://ignitionrobotics.org/docs/dome/moving_robot).
+  * Check the structure of the [`tunnel.sdf`](https://github.com/ignitionrobotics/ign-gazebo/blob/ign-gazebo4/examples/worlds/tunnel.sdf#L1575) model.
 * Can you change the launchile to use a different physics engine? Like TPE.
+  * Check `ign-physics` tutorial: [Switching physics engines](https://github.com/ignitionrobotics/ign-physics/blob/ign-physics3/tutorials/04-switching-physics-engines.md).
 * The `diff_drive.sdf` example world (`ign_ws/src/ign-gazebo/examples/worlds/diff_drive.sdf`) does not use the same `cmd_vel` topic to receive velocity commands, can you modify the commands to make it work in this scenario?
+  * Check the `diff_drive.sdf` [example commands](https://github.com/ignitionrobotics/ign-gazebo/blob/ign-gazebo4//examples/worlds/diff_drive.sdf#L7) and adjust the `ros_ign` bridges properly.
 
 Want to dig deeper inside Ignition gazebo? Browse the following links:
 
