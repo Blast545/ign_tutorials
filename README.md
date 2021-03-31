@@ -37,7 +37,6 @@ We'll start with the steps to complete the tutorial, and later will be explained
 mkdir -p ~/catkin_ws/src
 git clone git@github.com:Blast545/ign_tutorials.git ~/catkin_ws/src
 cd catkin_ws
-rosdep install -y --from-paths src --ignore-src --rosdistro melodic
 catkin_make
 ```
 
