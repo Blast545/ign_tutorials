@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find ros_ign_gazebo)/launch/ign_gazebo.launch">
+    <arg name="ign_args" value="-r -v 1 tunnel.sdf"/>
+  </include>
+
+  <node
+    pkg="ros_ign_bridge"
+    type="parameter_bridge"
+    name="$(anon ros_ign_bridge)"
+    output="screen"
+    args="/model/vehicle/odometry@nav_msgs/Odometry@ignition.msgs.Odometry /cmd_vel@geometry_msgs/Twist@ignition.msgs.Twist ">
+  </node>
+
+  <node
+    type="rviz"
+    name="rviz"
+    pkg="rviz"
+    args="-d $(find ign_tutorials)/rviz/diff_drive_demo.rviz" />
+
+  <!-- <node -->
+  <!--   pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" -->
+  <!--   name="teleop"> -->
+  <!-- </node> -->
+
+</launch>
